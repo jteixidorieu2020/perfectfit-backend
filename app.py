@@ -1,7 +1,8 @@
-
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # ✅ ADD THIS
 
 app = Flask(__name__)
+CORS(app)  # ✅ ALLOW ALL ORIGINS
 
 @app.route('/recommend', methods=['POST'])
 def recommend_size():
@@ -10,7 +11,6 @@ def recommend_size():
     weight = data.get('weight')
     product_type = data.get('product_type')
 
-    # Basic rule-based size prediction logic (for testing/demo)
     size = "M"
     confidence = "80%"
     if product_type == "top":
@@ -24,15 +24,5 @@ def recommend_size():
             size = "L"
         else:
             size = "XL"
-    elif product_type == "bottom":
-        size = "M"  # Placeholder logic
-    elif product_type == "footwear":
-        size = "42"  # Placeholder logic
 
-    return jsonify({
-        "size": size,
-        "confidence": confidence
-    })
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    return jsonify({"size": size, "confidence": confidence})
